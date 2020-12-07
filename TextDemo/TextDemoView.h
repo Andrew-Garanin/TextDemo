@@ -41,6 +41,8 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+public:
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // версия отладки в TextDemoView.cpp

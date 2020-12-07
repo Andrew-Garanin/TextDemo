@@ -23,6 +23,7 @@
 IMPLEMENT_DYNCREATE(CTextDemoView, CScrollView)
 
 BEGIN_MESSAGE_MAP(CTextDemoView, CScrollView)
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // Создание или уничтожение CTextDemoView
@@ -160,4 +161,70 @@ void CTextDemoView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	}
 	CScrollView::OnUpdate(pSender, lHint, pHint);
 
+}
+
+
+void CTextDemoView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: добавьте свой код обработчика сообщений или вызов стандартного
+	// TODO: Добавьте собственный код обработчика
+	CSize DocSize = GetTotalSize();
+	RECT ClientRect;
+	GetClientRect(&ClientRect);
+
+	switch (nChar)
+	{
+	case VK_LEFT:     // стрелка влево
+		if (ClientRect.right < DocSize.cx)
+			SendMessage(WM_HSCROLL, SB_LINELEFT);
+		break;
+	case VK_RIGHT:    // стрелка вправо
+		if (ClientRect.right < DocSize.cx)
+			SendMessage(WM_HSCROLL, SB_LINERIGHT);
+		break;
+	case VK_UP:       // стрелка вверх
+		if (ClientRect.bottom < DocSize.cy)
+			SendMessage(WM_VSCROLL, SB_LINEUP);
+		break;
+	case VK_DOWN:     // стрелка вниз
+		if (ClientRect.bottom < DocSize.cy)
+			SendMessage(WM_VSCROLL, SB_LINEDOWN);
+		break;
+	case VK_HOME:     // клавиша Home
+		if (::GetKeyState(VK_CONTROL) & 0x8000)
+			// Ctrl+Home 
+		{
+			if (ClientRect.bottom < DocSize.cy)
+				SendMessage(WM_VSCROLL, SB_TOP);
+		}
+		else            // Home без Ctrl
+		{
+			if (ClientRect.right < DocSize.cx)
+				SendMessage(WM_HSCROLL, SB_LEFT);
+		}
+		break;
+	case VK_END:      // клавиша End 
+		if (::GetKeyState(VK_CONTROL) & 0x8000)
+			// Ctrl+End
+		{
+			if (ClientRect.bottom < DocSize.cy)
+				SendMessage(WM_VSCROLL, SB_BOTTOM);
+		}
+		else          // End без Ctrl
+		{
+			if (ClientRect.right < DocSize.cx)
+				SendMessage(WM_HSCROLL, SB_RIGHT);
+		}
+		break;
+	case VK_PRIOR:    // клавиша PgUp 
+		if (ClientRect.bottom < DocSize.cy)
+			SendMessage(WM_VSCROLL, SB_PAGEUP);
+		break;
+	case VK_NEXT:     // клавиша PgDn
+		if (ClientRect.bottom < DocSize.cy)
+			SendMessage(WM_VSCROLL, SB_PAGEDOWN);
+		break;
+	}
+
+	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
